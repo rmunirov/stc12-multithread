@@ -12,6 +12,8 @@ public class MessageThread implements Runnable {    //TODO what's better impleme
     }
 
     public void run() {
+        if (monitor == null) return;
+
         while (true) {
 
             synchronized (monitor) {

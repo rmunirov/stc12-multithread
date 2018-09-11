@@ -14,6 +14,8 @@ public class TimerThread implements Runnable {
 
     @Override
     public void run() {
+        if (monitor == null) return;
+        
         System.out.println(LocalDateTime.now());
         startTimeMillis = System.currentTimeMillis();
         while (true) {
