@@ -1,37 +1,38 @@
 package ru.innopolis.stc12.multithread.Lock;
 
-import ru.innopolis.stc12.multithread.Wait.Monitor;
-
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class MessageThread implements Runnable {    //TODO what's better implement Runnable or extend Thread
-    private final Monitor monitor;
     private int interval;
     private Thread thread;
-    private Lock lock = new ReentrantLock();
+    private Lock lock;
+    private Condition condition;
+    private MyCounter counter;
 
-    MessageThread(Monitor monitor, int interval) {
-        this.monitor = monitor;
+    MessageThread(MyCounter counter, int interval) {
+        this.counter = counter;
+        this.lock = counter.getLock();
+        this.condition = counter.getCondition();
         this.interval = interval;
         System.out.println("message every " + interval + " second");
     }
 
     public void run() {
-        while (true) {
-            //TODO how else I dont know
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                return;
-            }
+        if (lock == null) return;
+        if (condition == null) return;
+        if (counter == null) return;
 
+        while (true) {
             try {
                 lock.lockInterruptibly();
-                if ((monitor.getSeconds() > 0) && ((monitor.getSeconds() % interval) == 0)) {
+                if ((counter.getSeconds() > 0) && ((counter.getSeconds() % interval) == 0)) {
                     System.out.println("message every " + interval + " second");
                 }
+                condition.signalAll();
+                condition.await();
             } catch (InterruptedException e) {
+                System.out.println(e.getMessage());
                 return;
             }
             lock.unlock();

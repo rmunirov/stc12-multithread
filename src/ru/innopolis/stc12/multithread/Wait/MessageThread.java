@@ -18,7 +18,7 @@ public class MessageThread implements Runnable {    //TODO what's better impleme
                 if ((monitor.getSeconds() > 0) && ((monitor.getSeconds() % interval) == 0)) {
                     System.out.println("message every " + interval + " second");
                 }
-                monitor.notifyAll();    //TODO if remove parameter monitor, then executed exception
+                monitor.notifyAll();
                 try {
                     monitor.wait();
                 } catch (InterruptedException e) {

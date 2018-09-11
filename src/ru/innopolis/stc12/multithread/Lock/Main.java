@@ -1,13 +1,12 @@
 package ru.innopolis.stc12.multithread.Lock;
 
-import ru.innopolis.stc12.multithread.Wait.Monitor;
-
 public class Main {
     public static void main(String[] args) {
-        Monitor monitor = new Monitor();
-        TimerThread timerThread = new TimerThread(monitor);
-        MessageThread messageThread5 = new MessageThread(monitor, 5);
-        MessageThread messageThread7 = new MessageThread(monitor, 7);
+        MyCounter condition = MyCounter.getInstance();
+
+        TimerThread timerThread = new TimerThread(condition);
+        MessageThread messageThread5 = new MessageThread(condition, 5);
+        MessageThread messageThread7 = new MessageThread(condition, 7);
 
         timerThread.start();
         messageThread5.start();
